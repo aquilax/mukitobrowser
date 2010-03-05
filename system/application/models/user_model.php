@@ -59,6 +59,15 @@ class User_model extends Model{
     if ($id){
       return $id;
     } else {
+      return -1000;
+    }
+  }
+
+  function getCid(){
+    $id = $this->session->userdata('cid');
+    if ($id){
+      return $id;
+    } else {
       return 0;
     }
   }
@@ -112,6 +121,7 @@ class User_model extends Model{
     $this->db->where('user_id', $uid);
     $query = $this->db->get('character', 1);
     if ($query->num_rows() == 1){
+      $this->session->set_userdata(array('cid' => $cid));
       return TRUE;
     } else {
       return FALSE;
