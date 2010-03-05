@@ -17,6 +17,7 @@ class BASE_Controller extends Controller{
   protected function load_defaults() {
     $this->logged = $this->user_model->logged();
     $this->uid = $this->user_model->getId();
+    $this->cid = $this->user_model->getCid();
   }
 }
 ?>
