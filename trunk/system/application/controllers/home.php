@@ -14,6 +14,12 @@ class Home extends OUT_Controller{
   }
 
   function start(){
+    $cid = $this->uri->segment(3);
+    if ($cid){
+      if ($this->user_model->setCharacter($cid, $this->uid)){
+        redirect('game');
+      }
+    }
     $this->data['characters'] = $this->user_model->getCharactes($this->uid);
     $this->render('out');
   }

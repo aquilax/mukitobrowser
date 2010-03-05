@@ -106,5 +106,16 @@ class User_model extends Model{
     $query = $this->db->get('character c');
     return $query->result_array();
   }
+
+  function setCharacter($cid, $uid){
+    $this->db->where('id', $cid);
+    $this->db->where('user_id', $uid);
+    $query = $this->db->get('character', 1);
+    if ($query->num_rows() == 1){
+      return TRUE;
+    } else {
+      return FALSE;
+    }
+  }
 }
 ?>
