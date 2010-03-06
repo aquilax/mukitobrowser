@@ -42,7 +42,7 @@ function Game() {
 $(document).ready(function(){
   g = new Game();
   $('.dir').click(function(event){
-    var mt = $(this).attr('name');
+    var mt = $(this).attr('id');
     g.move(mt);
     return false;
   })

@@ -12,6 +12,7 @@
 class BASE_Model extends Model{
 
   protected $data = array();
+  protected $update = array();
 
   function get($key, $default = FALSE){
     if (isset($this->data[$key])){
@@ -22,7 +23,18 @@ class BASE_Model extends Model{
   }
 
   function set($key, $val){
-    $this->data[$key] = $val;
+    $ov = $this->get($key);
+    if ($ov != $val){
+      $this->data[$key] = $val;
+      $this->update[$key] = $val;
+    }
+  }
+
+  function update($table, $key = 'id'){
+    if ($this->update){
+      $this->db->where($key, $this->get($key));
+      $this->db->update($table, $this->update);
+    }
   }
 }
 ?>
