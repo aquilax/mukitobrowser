@@ -1,5 +1,4 @@
 <?php
-  print_r($characters);
   if($characters){
     echo '<table>';
     echo '<tr>';
