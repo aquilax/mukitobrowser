@@ -10,6 +10,9 @@ require APPPATH.'libraries/BASE_Controller.php';
 class Game extends BASE_Controller{
   
   function index(){
+    if (!$this->logged){
+      redirect('');
+    }
     $this->load->model('character_model', 'char');
     $this->char->load($this->cid);
     echo 'Hi '.$this->char->get('name');

@@ -1,0 +1,118 @@
+#world{
+  border-spacing:0;
+}
+#world td{
+  background-image: url(/images/tiles.gif);
+  background-repeat: no-repeat;
+  padding:0;
+  /*border: 1px solid #000;*/
+}
+#world td div{
+  height:32px;
+  width:32px;
+  background-image: url(/images/tiles2.gif);
+  background-repeat: no-repeat;
+}
+.t{background-position: 0 0;}
+.t_0{background-position: 1033px 1033px;}
+.t_2{background-position: -33px 0;}
+.t_3{background-position: -66px 0;}
+.t_4{background-position: -99px 0;}
+.t_5{background-position: -132px 0;}
+.t_6{background-position: -165px 0;}
+.t_7{background-position: -198px 0;}
+.t_8{background-position: -231px 0;}
+.t_9{background-position: -264px 0;}
+.t_10{background-position: -297px 0;}
+.t_11{background-position: 0 -33px;}
+.t_12{background-position: -33px -33px;}
+.t_13{background-position: -66px -33px;}
+.t_14{background-position: -99px -33px;}
+.t_15{background-position: -132px -33px;}
+.t_16{background-position: -165px -33px;}
+.t_17{background-position: -198px -33px;}
+.t_18{background-position: -231px -33px;}
+.t_19{background-position: -264px -33px;}
+.t_20{background-position: -297px -33px;}
+.t_21{background-position: 0 -66px;}
+.t_22{background-position: -33px -66px;}
+.t_23{background-position: -66px -66px;}
+.t_24{background-position: -99px -66px;}
+.t_25{background-position: -132px -66px;}
+.t_26{background-position: -165px -66px;}
+.t_27{background-position: -198px -66px;}
+.t_28{background-position: -231px -66px;}
+.t_29{background-position: -264px -66px;}
+.t_30{background-position: -297px -66px;}
+.t_31{background-position: 0 -99px;}
+.t_32{background-position: -33px -99px;}
+.t_33{background-position: -66px -99px;}
+.t_34{background-position: -99px -99px;}
+.t_35{background-position: -132px -99px;}
+.t_36{background-position: -165px -99px;}
+.t_37{background-position: -198px -99px;}
+.t_38{background-position: -231px -99px;}
+.t_39{background-position: -264px -99px;}
+.t_40{background-position: -297px -99px;}
+.t_41{background-position: 0 -132px;}
+.t_42{background-position: -33px -132px;}
+.t_43{background-position: -66px -132px;}
+.t_44{background-position: -99px -132px;}
+.t_45{background-position: -132px -132px;}
+.t_46{background-position: -165px -132px;}
+.t_47{background-position: -198px -132px;}
+.t_48{background-position: -231px -132px;}
+.t_49{background-position: -264px -132px;}
+.t_50{background-position: -297px -132px;}
+.t_51{background-position: 0 -165px;}
+.t_52{background-position: -33px -165px;}
+.t_53{background-position: -66px -165px;}
+.t_54{background-position: -99px -165px;}
+.t_55{background-position: -132px -165px;}
+.t_56{background-position: -165px -165px;}
+.t_57{background-position: -198px -165px;}
+.t_58{background-position: -231px -165px;}
+.t_59{background-position: -264px -165px;}
+.t_60{background-position: -297px -165px;}
+.t_61{background-position: 0 -165px;}
+.t_62{background-position: -33px -198px;}
+.t_63{background-position: -66px -198px;}
+.t_64{background-position: -99px -198px;}
+.t_65{background-position: -132px -198px;}
+.t_66{background-position: -165px -198px;}
+.t_67{background-position: -198px -198px;}
+.t_68{background-position: -231px -198px;}
+.t_69{background-position: -264px -198px;}
+.t_70{background-position: -297px -198px;}
+.t_71{background-position: 0 -165px;}
+.t_72{background-position: -33px -231px;}
+.t_73{background-position: -66px -231px;}
+.t_74{background-position: -99px -231px;}
+.t_75{background-position: -132px -231px;}
+.t_76{background-position: -165px -231px;}
+.t_77{background-position: -198px -231px;}
+.t_78{background-position: -231px -231px;}
+.t_79{background-position: -264px -231px;}
+.t_80{background-position: -297px -231px;}
+.t_81{background-position: 0 -165px;}
+.t_82{background-position: -33px -264px;}
+.t_83{background-position: -66px -264px;}
+.t_84{background-position: -99px -264px;}
+.t_85{background-position: -132px -264px;}
+.t_86{background-position: -165px -264px;}
+.t_87{background-position: -198px -264px;}
+.t_88{background-position: -231px -264px;}
+.t_89{background-position: -264px -264px;}
+.t_90{background-position: -297px -264px;}
+.t_91{background-position: 0 -165px;}
+.t_92{background-position: -33px -297px;}
+.t_93{background-position: -66px -297px;}
+.t_94{background-position: -99px -297px;}
+.t_95{background-position: -132px -297px;}
+.t_96{background-position: -165px -297px;}
+.t_97{background-position: -198px -297px;}
+.t_98{background-position: -231px -297px;}
+.t_99{background-position: -264px -297px;}
+.t_100{background-position: -297px -297px;}
+
+#world td div#i_5_5{background:url(/images/hero.gif) no-repeat;}

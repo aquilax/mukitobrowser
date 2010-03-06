@@ -14,6 +14,9 @@ class Home extends OUT_Controller{
   }
 
   function start(){
+    if (!$this->logged){
+      redirect('');
+    }
     $cid = $this->uri->segment(3);
     if ($cid){
       if ($this->user_model->setCharacter($cid, $this->uid)){

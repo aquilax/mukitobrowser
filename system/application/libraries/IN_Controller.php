@@ -6,10 +6,15 @@
  */
 require 'PAGE_Controller.php';
 
-class OUT_Controller extends PAGE_Controller{
+class IN_Controller extends PAGE_Controller{
 
   public function __construct() {
     parent::__construct();
+
+    $this->load->model('character_model', 'char');
+    if (!$this->char->load($this->cid)){
+      redirect('');
+    }
   }
 }
 ?>
