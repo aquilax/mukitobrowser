@@ -110,7 +110,7 @@ class User extends OUT_Controller{
     $this->data['title'] = lang('Charatcter created');
     $page = lang('Your character was created succesfully.');
     $page .= '<br /><br />';
-    $page .= sprintf(lang('You may now continue playing %s!'), $this->gamename);
+    $page .= sprintf(lang('You may now %s playing %s!'), anchor('', lang('continue')), $this->gamename);
     $this->data['page'] = $page;
     $this->action = 'page';
     $this->render('out');

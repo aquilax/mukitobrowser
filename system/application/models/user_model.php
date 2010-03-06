@@ -93,7 +93,7 @@ class User_model extends Model{
     if ($data){
       unset($data['id']);
       $data['name'] = $post['name'];
-      $data['uid'] = $uid;
+      $data['user_id'] = $uid;
       $this->db->insert('characters', $data);
       return TRUE;
     } else {

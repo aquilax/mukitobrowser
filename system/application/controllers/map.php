@@ -19,6 +19,7 @@ class Map extends IN_Controller{
   function index(){
     $this->data['js'][] = 'http://ajax.googleapis.com/ajax/libs/jquery/1.4.0/jquery.min.js';
     $this->data['js'][] = site_url('js/map.js?1');
+    $this->data['js'][] = site_url('js/jquery.boxy.js?1');
     $this->data['title'] = lang('Exploring');
     $x = $this->char->get('xpos');
     $y = $this->char->get('ypos');

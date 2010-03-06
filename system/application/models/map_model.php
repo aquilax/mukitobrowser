@@ -43,6 +43,12 @@ class Map_model extends Model{
     return array('t' => 0, 'move'=> 0, 'chancetofight'=> 0, 'pid' => 0);
   }
 
+  function loadPlace($pid){
+    $this->db->where('id', $pid);
+    $res = $this->db->get('place', 1);
+    return $res->row_array();
+  }
+
   function move($post){
     $ret = array();
     $ret['c'] = 'game/explore';
@@ -73,29 +79,20 @@ class Map_model extends Model{
     $this->char->set('xpos', $x);
     $this->char->set('ypos', $y);
 
-//    if ($res && $res['pid']){
-//      //Place
-//      $place = $this->loadPlace($res['pid']);
-//      if ($place){
-//        //Travel to town
-//        if ($place['controller'] == 'town'){
-//          $townrow = $this->travelTo($place['iid'], $userrow);
-//          $data = array_merge($data, $townrow);
-//        }
-//        $ret['c'] = $place['controller'];
-//      }
-//    } else {
-//      $max = 2+(12-ceil(10+($userrow['difficulty'])))+(10-$res['chancetofight']);
-//      $chancetofight = mt_rand(1,$max);
-//      $fight = FALSE;
-//      if ($chancetofight == 1) {
-//        $data['currentaction'] = 'Fighting';
-//        $data['currentfight'] = 1;
-//        $ret['c'] = 'fight';
-//      } else {
-//        $data['currentaction'] = 'Exploring';
-//      }
-//    }
+    if ($res && $res['pid']){
+      //Place
+      $place = $this->loadPlace($res['pid']);
+      if ($place){
+        //Travel to town
+        if ($place['controller'] == 'town'){
+          $townrow = $this->travelTo($place['iid'], $userrow);
+          $data = array_merge($data, $townrow);
+        }
+        $ret['c'] = $place['controller'];
+      }
+    } else {
+      //Fight?
+    }
     $ret['x'] = $x;
     $ret['y'] = $y;
     $this->char->update('characters');
