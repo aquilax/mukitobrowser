@@ -32,6 +32,8 @@ class PAGE_Controller extends BASE_Controller {
     $sql = "SET time_zone = '+02:00'";
     $this->db->query($sql);
 
+    $this->gamename = $this->config->item('gamename');
+    $this->data['gamename'] = $this->gamename;
     $this->data['logged'] = $this->logged;
     $this->admin = $this->user_model->isAdmin();
     $this->data['admin'] = $this->admin;

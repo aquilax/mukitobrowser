@@ -15,6 +15,7 @@ class Character_model extends BASE_Model{
     $query = $this->db->get('character', 1);
     if ($query->num_rows() == 1){
       $this->data = $query->row_array();
+      return TRUE;
     } else {
       return FALSE;
     }
