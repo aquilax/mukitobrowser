@@ -49,6 +49,29 @@ class Map_model extends Model{
     return $res->row_array();
   }
 
+  function startAFight($mid){
+    //ugly but should work
+    $this->db->where('id', $mid);
+    $query = $this->db->get('monster', 1);
+    $monster = $query->row_array();
+    
+    $data = array(
+      'character_id' => $this->char->get('id'),
+      'xpos' => $this->char->get('xpos'),
+      'ypos' => $this->char->get('ypos'),
+      'map_id' => $this->char->get('map_id'),
+      'fight_round' => '0',
+      'monster_id' => $monster['id'],
+      'hp' => $monster['hp_max'],
+      'hp_next_regen' => time()+$monster['hp_regen_time'],
+      'mp' => $monster['mp_max'],
+      'state' => 1
+    );
+    $this->db->insert('fight', $data);
+    return $this->db->insert_id();
+  }
+
+
   function move($post){
     $ret = array();
     $ret['c'] = 'game/explore';
@@ -91,14 +114,25 @@ class Map_model extends Model{
         $ret['c'] = $place['controller'];
       }
     } else {
-      //Fight?
+      $max = 2+(10-$res['chancetofight']);
+      $chancetofight = mt_rand(1,$max);
+      $fight = FALSE;
+      $chancetofight = 1;
+      if ($chancetofight == 1) {
+        $this->char->set('state', 2);
+        //FIXME: hardcded monster 1
+        $mid = 1;
+        $fid = $this->startAFight($mid);
+        $this->char->set('fight_id', $fid);
+        $ret['c'] = 'fight';
+      } else {
+        $this->char->set('state', 1);
+      }
     }
     $ret['x'] = $x;
     $ret['y'] = $y;
     $this->char->update('characters');
     return $ret;
   }
-
-
 }
 ?>

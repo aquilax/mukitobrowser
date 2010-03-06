@@ -20,7 +20,11 @@ class Sign extends IN_Controller{
   function index(){
     $this->load->model('sign_model');
     $this->data['sign'] = $this->sign_model->load();
-    $this->render();
+    if ($this->data['sign']){
+      $this->render();
+    } else {
+      redirect('map');
+    }
   }
 }
 ?>
