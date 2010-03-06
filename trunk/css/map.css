@@ -116,3 +116,16 @@
 .t_100{background-position: -297px -297px;}
 
 #world td div#i_5_5{background:url(/images/hero.gif) no-repeat;}
+.dir{
+  display:block;
+  width:100%;
+  height:100%;
+  text-align:center;
+  color:#000;
+  text-decoration:none;
+}
+.dir:hover{
+  border:1px solid silver;
+  height:30px;
+  width:30px;
+}

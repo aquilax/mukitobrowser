@@ -42,7 +42,7 @@ class User_model extends Model{
 
   function charTaken($charname){
     $this->db->where('name', $charname);
-    $query = $this->db->get('character');
+    $query = $this->db->get('characters');
     return $query->num_rows() != 0;
   }
 
@@ -88,13 +88,13 @@ class User_model extends Model{
     $this->db->where('class_id', $post['class_id']);
     //This enables only the basic classes
     $this->db->where('user_id', 0);
-    $query = $this->db->get('character', 1);
+    $query = $this->db->get('characters', 1);
     $data = $query->row_array();
     if ($data){
       unset($data['id']);
       $data['name'] = $post['name'];
       $data['uid'] = $uid;
-      $this->db->insert('character', $data);
+      $this->db->insert('characters', $data);
       return TRUE;
     } else {
       return FALSE;
@@ -112,14 +112,14 @@ class User_model extends Model{
     $this->db->where('user_id', $uid);
     $this->db->join('character_class cc', 'cc.id = c.class_id');
     $this->db->order_by('created');
-    $query = $this->db->get('character c');
+    $query = $this->db->get('characters c');
     return $query->result_array();
   }
 
   function setCharacter($cid, $uid){
     $this->db->where('id', $cid);
     $this->db->where('user_id', $uid);
-    $query = $this->db->get('character', 1);
+    $query = $this->db->get('characters', 1);
     if ($query->num_rows() == 1){
       $this->session->set_userdata(array('cid' => $cid));
       return TRUE;

@@ -12,7 +12,7 @@ class Character_model extends BASE_Model{
   
   function load($cid){
     $this->db->where('id', $cid);
-    $query = $this->db->get('character', 1);
+    $query = $this->db->get('characters', 1);
     if ($query->num_rows() == 1){
       $this->data = $query->row_array();
       return TRUE;
