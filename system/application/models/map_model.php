@@ -49,7 +49,10 @@ class Map_model extends Model{
     return $res->row_array();
   }
 
-  function startAFight($mid){
+  function startAFight(){
+    //FIXME: multiple enemies here
+    //Choose enemies
+    $mid = 1;
     //ugly but should work
     $this->db->where('id', $mid);
     $query = $this->db->get('monster', 1);
@@ -61,14 +64,21 @@ class Map_model extends Model{
       'ypos' => $this->char->get('ypos'),
       'map_id' => $this->char->get('map_id'),
       'fight_round' => '0',
+      'state' => 1
+    );
+    $this->db->insert('fight', $data);
+    $fid = $this->db->insert_id();
+    //insertEnemies
+    $data = array(
+      'fight_id' => $fid,
       'monster_id' => $monster['id'],
       'hp' => $monster['hp_max'],
       'hp_next_regen' => time()+$monster['hp_regen_time'],
       'mp' => $monster['mp_max'],
-      'state' => 1
+      'state' => 1,
     );
-    $this->db->insert('fight', $data);
-    return $this->db->insert_id();
+    $this->db->insert('enemy', $data);
+    return $fid;
   }
 
 
@@ -120,9 +130,7 @@ class Map_model extends Model{
       $chancetofight = 1;
       if ($chancetofight == 1) {
         $this->char->set('state', 2);
-        //FIXME: hardcded monster 1
-        $mid = 1;
-        $fid = $this->startAFight($mid);
+        $fid = $this->startAFight();
         $this->char->set('fight_id', $fid);
         $ret['c'] = 'fight';
       } else {

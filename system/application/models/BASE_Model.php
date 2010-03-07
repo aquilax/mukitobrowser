@@ -22,6 +22,10 @@ class BASE_Model extends Model{
     }
   }
 
+  function getData(){
+    return $this->data;
+  }
+
   function set($key, $val){
     $ov = $this->get($key);
     if ($ov != $val){
