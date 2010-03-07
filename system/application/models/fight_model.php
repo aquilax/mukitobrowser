@@ -56,6 +56,7 @@ class Fight_model extends BASE_Model{
 
   var $players = null;
   var $monsters = null;
+  var $time = 0;
 
   function load($fid){
     $this->db->where('id', $fid);
@@ -74,6 +75,10 @@ class Fight_model extends BASE_Model{
       foreach($monsters as $monster){
         $this->monsters->add($monster, 'enemy');
       }
+
+      //To be fair set the time at the beginning
+      $this->time = time();
+      
       return TRUE;
     } else {
       return FALSE;
@@ -88,13 +93,23 @@ class Fight_model extends BASE_Model{
     return $query->result_array();
   }
 
+  function regenerateParty($party){
+    //TODO: Regenerate party
+  }
+
+  function updateParty($party){
+    //TODO: Update Party
+  }
+
   function doFight($post){
+    //check regeneration first;
+    $this->regenerateParty($this->players);
+    $this->regenerateParty($this->monsters);
+
     if (!$post){
-      //Do nothing
+      //Do nothing?
       return;
     }
-    //check regeneration first;
-
     if ($post['attack']){
       //attack monster
       //monster attacks
