@@ -20,7 +20,7 @@ class PAGE_Controller extends BASE_Controller {
   public function __construct() {
     parent::__construct();
     $this->load_defaults_page();
-    //$this->output->enable_profiler(TRUE);
+    $this->output->enable_profiler(TRUE);
   }
 
   protected function load_defaults_page() {

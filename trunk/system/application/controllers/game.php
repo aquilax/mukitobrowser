@@ -21,6 +21,12 @@ class Game extends BASE_Controller{
     if ($this->char->get('state') == 2){
       redirect('fight');
     }
+    if ($this->char->get('state') == 255){
+      echo 'You are dead. Reviving!!!<br/>';
+      $this->char->set('state', 1);
+      $this->char->update('characters');
+      echo anchor('game', 'continie').'<br/>';
+    }
     echo 'Hi '.$this->char->get('name');
     echo ' Dispatcher here';
   }

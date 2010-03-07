@@ -1,4 +1,5 @@
 <style>
+  body{font-size:0.8em}
   table td{vertical-align:top}
 </style>
 <?php
