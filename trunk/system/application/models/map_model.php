@@ -77,7 +77,10 @@ class Map_model extends Model{
       'mp' => $monster['mp_max'],
       'state' => 1,
     );
-    $this->db->insert('enemy', $data);
+    $mob = rand(1,3);
+    for($i = 0; $i < $mob; $i++){
+      $this->db->insert('enemy', $data);
+    }
     return $fid;
   }
 
@@ -126,6 +129,7 @@ class Map_model extends Model{
     } else {
       $max = 2+(10-$res['chancetofight']);
       $chancetofight = mt_rand(1,$max);
+      //$chancetofight = 0;
       if ($chancetofight == 1) {
         $this->char->set('state', 2);
         $fid = $this->startAFight();

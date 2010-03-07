@@ -36,7 +36,7 @@ foreach ($players->list as $p){
   echo '<br/>';
   foreach($alist as $k =>$v){
     echo '<label>';
-    echo form_radio('aid['.$id.']', $v);
+    echo form_radio('aid['.$id.']', $k, $k==1);
     echo $v.' <img src="http://localhost/phpmyadmin/themes/original/img/b_edit.png"/>';
     echo '</label><br/>';
   }
@@ -56,9 +56,18 @@ echo implode('<br/>', $log);
 echo '</td>';
 echo '<td>';
 echo '<h2>'.lang('Enemy').'</h2>';
+echo '<table border="1">';
 foreach ($monsters->list as $p){
+  echo '<tr>';
+  echo '<td>';
+  echo '<img src="/i/m/'.$p->data['monster_id'].'.jpg" />';
+  echo '</td>';
+  echo '<td>';
   stats($p->data);
+  echo '</td>';
+  echo '</tr>';
 }
+echo '</table>';
 echo '</td>';
 echo '</tr>';
 echo '</table>';
