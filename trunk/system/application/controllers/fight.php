@@ -24,11 +24,9 @@ class Fight extends IN_Controller{
     if (!$this->fight_model->load($this->fid)){
       redirect('game');
     }
-    $this->load->model('monster_model', 'monster');
-    if (!$this->monster->load($this->fight_model->get('monster_id'))){
-      redirect('game');
-    }
     $this->fight_model->doFight($_POST);
+    $this->data['players'] = $this->fight_model->players;
+    $this->data['monsters'] = $this->fight_model->monsters;
     $this->render();
   }
 }
