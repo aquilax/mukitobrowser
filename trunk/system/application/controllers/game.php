@@ -24,6 +24,7 @@ class Game extends BASE_Controller{
     if ($this->char->get('state') == 255){
       echo 'You are dead. Reviving!!!<br/>';
       $this->char->set('state', 1);
+      $this->char->set('hp', $this->char->get('hp_max'));
       $this->char->update('characters');
       echo anchor('game', 'continie').'<br/>';
     }
