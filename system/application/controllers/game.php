@@ -18,6 +18,9 @@ class Game extends BASE_Controller{
     if ($this->char->get('state') == 1){
       redirect('map');
     }
+    if ($this->char->get('state') == 2){
+      redirect('fight');
+    }
     echo 'Hi '.$this->char->get('name');
     echo ' Dispatcher here';
   }
