@@ -57,6 +57,8 @@ class Fight_model extends BASE_Model{
   var $players = null;
   var $monsters = null;
   var $time = 0;
+  var $log = array();
+  var $run = FALSE;
 
   function load($fid){
     $this->db->where('id', $fid);
@@ -101,22 +103,33 @@ class Fight_model extends BASE_Model{
     //TODO: Update Party
   }
 
+  function doRun(){
+    $this->char->set('state', 1);
+    $this->char->set('fight_id', 0);
+    $this->char->update('characters');
+    $this->run = TRUE;
+  }
+
   function doFight($post){
     //check regeneration first;
+    $this->log[] = 'Regenerate players';
     $this->regenerateParty($this->players);
+    $this->log[] = 'Regenerate monsters';
     $this->regenerateParty($this->monsters);
 
     if (!$post){
       //Do nothing?
       return;
     }
-    if ($post['attack']){
-      //attack monster
-      //monster attacks
-    } elseif($post['spell']){
-      //cast spell
-      //monster attacks
-    } elseif($post['run']){
+    if (isset($post['fight'])){
+      $this->log[] = 'Fight pressed';
+      //player's turn
+      $this->log[] = 'Player\'s turn';
+      //monster's turn
+      $this->log[] = 'Monster\'s turn';
+    } elseif(isset($post['run'])){
+      $this->log[] = 'Run pressed';
+      $this->doRun();
       //Shame on you
       //chance to run
     }

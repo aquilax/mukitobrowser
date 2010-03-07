@@ -1,3 +1,6 @@
+<style>
+  table td{vertical-align:top}
+</style>
 <?php
 function stats($p){
   echo '<h3 class="name">'.$p['name'].'</h3>';
@@ -29,15 +32,27 @@ foreach ($players->list as $p){
   echo '      </td>';
   echo '      <td>';
   echo lang('Enemy', 'mid'.$id);
-  echo form_dropdown('mid['.$id.']', $mlist, 0, 'id="mid'.$id.'"');
+  echo form_dropdown('mid['.$id.']', $mlist, set_value('mid['.$id.']', 0), 'id="mid'.$id.'"');
   echo '<br/>';
-  echo lang('Action', 'aid'.$id);
-  echo form_dropdown('aid['.$id.']', $alist, 0, 'id="aid'.$id.'"');
+  foreach($alist as $k =>$v){
+    echo '<label>';
+    echo form_radio('aid['.$id.']', $v);
+    echo $v.' <img src="http://localhost/phpmyadmin/themes/original/img/b_edit.png"/>';
+    echo '</label><br/>';
+  }
+//  echo lang('Action', 'aid'.$id);
+//  echo form_dropdown('aid['.$id.']', $alist, 0, 'id="aid'.$id.'"');
   echo '      </td>';
   echo '    </tr>';
 }
 echo '    </table>';
 
+echo '</td>';
+echo '<td>';
+echo form_submit('fight', lang('Fight'));
+echo form_submit('run', lang('Run'));
+echo '<br />';
+echo implode('<br/>', $log);
 echo '</td>';
 echo '<td>';
 echo '<h2>'.lang('Enemy').'</h2>';
@@ -47,9 +62,7 @@ foreach ($monsters->list as $p){
 echo '</td>';
 echo '</tr>';
 echo '</table>';
-echo form_submit('fight', lang('Fight'));
-echo form_submit('run', lang('Run'));
 echo form_close();
-print_r($players);
-print_r($monsters);
+//print_r($players);
+//print_r($monsters);
 ?>

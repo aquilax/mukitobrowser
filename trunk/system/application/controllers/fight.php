@@ -26,12 +26,16 @@ class Fight extends IN_Controller{
     }
     $this->load->helper('form');
     $this->fight_model->doFight($_POST);
+    if ($this->fight_model->run){
+      redirect('game');
+    }
     $this->data['players'] = $this->fight_model->players;
     $this->data['monsters'] = $this->fight_model->monsters;
     $mlist = array();
-    foreach($this->fight_model->monsters->list as $m){
-      $mlist[$m->get('id')] = $m->get('name');
+    foreach($this->fight_model->monsters->list as $k => $m){
+      $mlist[$m->get('id')] = ($k+1).' '.$m->get('name');
     }
+    $this->data['log'] = $this->fight_model->log;
     $this->data['mlist'] = $mlist;
     $this->data['alist'] = array(0 => lang('Pass'), 1 => lang('Attack'));
     $this->render();
