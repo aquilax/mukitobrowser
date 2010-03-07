@@ -126,8 +126,6 @@ class Map_model extends Model{
     } else {
       $max = 2+(10-$res['chancetofight']);
       $chancetofight = mt_rand(1,$max);
-      $fight = FALSE;
-      $chancetofight = 1;
       if ($chancetofight == 1) {
         $this->char->set('state', 2);
         $fid = $this->startAFight();
