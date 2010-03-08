@@ -1,1 +1,3 @@
-http://strategywiki.org/wiki/Mu_Online/Dark_Knight
+http://strategywiki.org/wiki/Mu_Online/Dark_Knight - initial stats
+http://www.free-fonts.com/gothic_fonts.html - free Gothic fonts
+http://paulirish.com/2009/bulletproof-font-face-implementation-syntax/ - How to embed fonts 
