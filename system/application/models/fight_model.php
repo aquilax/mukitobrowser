@@ -145,6 +145,7 @@ class Fight_model extends BASE_Model{
     if (isset($post['fight'])){
       $this->log[] = 'Fight pressed';
       //Character's turn
+      $this->log[] = 'Player\'s turn';
       foreach($post['mid'] as $cid => $mid){
         if ($post['aid'][$cid] == 1){
           $monster = $this->monsters->getId($mid);
@@ -172,7 +173,8 @@ class Fight_model extends BASE_Model{
           $this->log[] = sprintf('Character passes');
         }
       }
-      //Monster's turn
+      //monster's turn
+      $this->log[] = 'Monster\'s turn';
       foreach ($this->monsters->list as $monster){
         $char = $this->players->getId($cid);
         $damage = mt_rand($monster->get('damage_min'), $monster->get('damage_max'));
@@ -196,10 +198,6 @@ class Fight_model extends BASE_Model{
         $char->set('hp', $hp);
         $this->update($char, 'characters');
       }
-
-      $this->log[] = 'Player\'s turn';
-      //monster's turn
-      $this->log[] = 'Monster\'s turn';
     } elseif(isset($post['run'])){
       $this->log[] = 'Run pressed';
       $this->doRun();
