@@ -82,7 +82,6 @@ class Fight_model extends BASE_Model{
       foreach($monsters as $monster){
         $this->monsters->add($monster, 'enemy');
       }
-
       //To be fair set the time at the beginning
       $this->time = time();
       
@@ -115,7 +114,7 @@ class Fight_model extends BASE_Model{
     $this->run = TRUE;
   }
 
-  function update($player, $table){
+  function doUpdate($player, $table){
     if ($player->update){
       $this->db->where('id', $player->get('id'));
       $this->db->update($table, $player->update);
@@ -129,6 +128,22 @@ class Fight_model extends BASE_Model{
       }
     }
     return TRUE;
+  }
+
+  //((B - D) * L + ((A-D) + (B-D)) * (20 - L) / 2) * S / 20
+  //
+  //here A - min damage
+  //B - max damage
+  //D - mobs defence
+  //L - your number of items + luck (max 7 i think)
+  //S - speed
+  function damage($c1, $c2){
+    $damage = mt_rand($c1->get('damage_min'), $c1->get('damage_max'));
+    if ($damage == $this->char->get('damage_max')){
+      $damage *= 2;
+      $this->log[] = sprintf('Character strikes excelent hit');
+    }
+    return $damage;
   }
 
   function doFight($post){
@@ -149,11 +164,8 @@ class Fight_model extends BASE_Model{
       foreach($post['mid'] as $cid => $mid){
         if ($post['aid'][$cid] == 1){
           $monster = $this->monsters->getId($mid);
-          $damage = mt_rand($this->char->get('damage_min'), $this->char->get('damage_max'));
-          if ($damage == $this->char->get('damage_max')){
-            $damage *= 2;
-            $this->log[] = sprintf('Character strikes excelent hit');
-          }
+          $damage = $this->damage($this->char, $monster);
+          
           $take =  $damage - $monster->get('defense');
           if ($take >= 1){
             $hp = $monster->get('hp') - $take;
@@ -168,7 +180,7 @@ class Fight_model extends BASE_Model{
             $this->log[] = sprintf('% is dead!', $monster->get('name').' '.$monster->get('id'));
           }
           $monster->set('hp', $hp);
-          $this->update($monster, 'enemy');
+          $this->doUpdate($monster, 'enemy');
         } elseif ($post['aid'][$cid] == 0){
           $this->log[] = sprintf('Character passes');
         }
@@ -177,11 +189,7 @@ class Fight_model extends BASE_Model{
       $this->log[] = 'Monster\'s turn';
       foreach ($this->monsters->list as $monster){
         $char = $this->players->getId($cid);
-        $damage = mt_rand($monster->get('damage_min'), $monster->get('damage_max'));
-        if ($damage == $monster->get('damage_max')){
-          $damage *= 2;
-          $this->log[] = sprintf('Monster strikes excelent hit');
-        }
+        $damage = $this->damage($monster, $this->char);
         $take =  $damage - $char->get('defense');
         if ($take >= 1){
           $hp = $char->get('hp') - $take;
@@ -196,8 +204,10 @@ class Fight_model extends BASE_Model{
           $this->log[] = sprintf('Player is dead!');
         }
         $char->set('hp', $hp);
-        $this->update($char, 'characters');
+        $this->doUpdate($char, 'characters');
       }
+      $this->set('fight_round', $this->get('fight_round')+1);
+      $this->update('fight');
     } elseif(isset($post['run'])){
       $this->log[] = 'Run pressed';
       $this->doRun();
@@ -205,12 +215,29 @@ class Fight_model extends BASE_Model{
       //chance to run
     }
     if ($this->monstersDead()){
-      $this->log[] = 'All dead';
-      $this->char->set('state', 1);
-      $this->char->update('characters');
-      redirect('game');
+      $this->finishFight();
     }
     //check outcome of the battle
   }
+
+  function finishFight(){
+    $this->set('state', 2);
+    $this->update('fight');
+    $this->log[] = 'All dead';
+    redirect('fight/victory');
+  }
+
+  function victory(){
+    $exp = 0;
+    foreach ($this->monsters->list as $monster){
+      $exp += $monster->get('hp_max');
+    }
+    $this->char->set('experience', $this->char->get('experience') + $exp);
+    $this->char->set('state', 1);
+    $this->char->update('characters');
+    return $exp;
+  }
+
+
 }
 ?>
