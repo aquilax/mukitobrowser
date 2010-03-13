@@ -19,6 +19,9 @@ function stats($p){
   echo '<li class="attack">'.lang('Ice resistant').': '.$p['ice_res'].'</li>';
   echo '<li class="attack">'.lang('Water resistant').': '.$p['water_res'].'</li>';
   echo '<li class="attack">'.lang('Fire resistant').': '.$p['fire_res'].'</li>';
+  if (isset($p['experience'])){
+    echo '<li class="experience">'.lang('Experience').': '.$p['experience'].'/'.$p['max_experience'].'</li>';
+  }
   echo '</ul>';
   echo '<td>';
 }
