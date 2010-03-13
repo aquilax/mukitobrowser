@@ -33,11 +33,28 @@ class Fight extends IN_Controller{
     $this->data['monsters'] = $this->fight_model->monsters;
     $mlist = array();
     foreach($this->fight_model->monsters->list as $k => $m){
-      $mlist[$m->get('id')] = ($k+1).' '.$m->get('name');
+      if($m->get('state') != $this->fight_model->dead_state){
+        $mlist[$m->get('id')] = ($k).' '.$m->get('name');
+      }
     }
     $this->data['log'] = $this->fight_model->log;
     $this->data['mlist'] = $mlist;
     $this->data['alist'] = array(0 => lang('Pass'), 1 => lang('Attack'));
+    $this->render();
+  }
+
+  function victory(){
+    $this->load->model('fight_model');
+    if (!$this->fight_model->load($this->fid)){
+      redirect('game');
+    }
+    $state = $this->fight_model->get('state');
+    if ($state != 2){
+      redirect('fight');
+    }
+    $this->data['fight'] = $this->fight_model->getData();
+    $this->data['monsters'] = $this->fight_model->monsters;
+    $this->data['exp'] = $this->fight_model->victory();
     $this->render();
   }
 }

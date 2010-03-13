@@ -1,10 +1,12 @@
 <style>
   body{font-size:0.8em}
   table td{vertical-align:top}
+  .s_255{background-color:silver}
 </style>
 <?php
 function stats($p){
-  echo '<h3 class="name">'.$p['name'].'</h3>';
+  echo '<td class="s_'.$p['state'].'">';
+  echo '<h3 class="name">'.$p['name'].' '.$p['id'].'</h3>';
   echo '<ul>';
   echo '<li class="level">'.lang('Level').': '.$p['level'].'</li>';
   echo '<li class="hp">'.lang('HP').': '.$p['hp'].'/'.$p['hp_max'].'</li>';
@@ -18,6 +20,7 @@ function stats($p){
   echo '<li class="attack">'.lang('Water resistant').': '.$p['water_res'].'</li>';
   echo '<li class="attack">'.lang('Fire resistant').': '.$p['fire_res'].'</li>';
   echo '</ul>';
+  echo '<td>';
 }
 echo form_open('fight');
 echo '<table border="1">';
@@ -28,9 +31,7 @@ echo '    <table border="1">';
 foreach ($players->list as $p){
   $id = $p->get('id');
   echo '    <tr>';
-  echo '      <td>';
   stats($p->data);
-  echo '      </td>';
   echo '      <td>';
   echo lang('Enemy', 'mid'.$id);
   echo form_dropdown('mid['.$id.']', $mlist, set_value('mid['.$id.']', 0), 'id="mid'.$id.'"');
@@ -63,9 +64,7 @@ foreach ($monsters->list as $p){
   echo '<td>';
   echo '<img src="/i/m/'.$p->data['monster_id'].'.jpg" />';
   echo '</td>';
-  echo '<td>';
   stats($p->data);
-  echo '</td>';
   echo '</tr>';
 }
 echo '</table>';
