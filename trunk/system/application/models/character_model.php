@@ -11,6 +11,7 @@ require 'BASE_Model.php';
 class Character_model extends BASE_Model{
 
   var $levelUpPoints = 5;
+  var $cclass = null;
 
   function load($cid){
     $this->db->where('id', $cid);
@@ -20,6 +21,37 @@ class Character_model extends BASE_Model{
       return TRUE;
     } else {
       return FALSE;
+    }
+  }
+
+  function createPoints(){
+    require_once('chars/char.php');
+    switch($this->get('class_id')){
+      case 1: {
+        require_once('chars/dk.php');
+        $this->cclass = new dk($this->getData());
+        break;
+      }
+      case 2: {
+        require_once('chars/dw.php');
+        $this->cclass = new dw($this->getData());
+        break;
+      }
+      case 3: {
+        require_once('chars/fe.php');
+        $this->cclass = new fe($this->getData());
+        break;
+      }
+      case 4: {
+        require_once('chars/mg.php');
+        $this->cclass = new mg($this->getData());
+        break;
+      }
+      default:{
+        require_once('chars/dk.php');
+        $this->cclass = new dk($this->getData());
+        break;
+      }
     }
   }
 

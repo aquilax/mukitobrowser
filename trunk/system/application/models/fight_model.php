@@ -6,17 +6,20 @@
  */
 
 require_once 'BASE_Model.php';
-
+require_once('chars/char.php');
+require_once('chars/monster.php');
 
 //Light player
 class Player{
   var $data = array();
   var $update = array();
   var $table = '';
+  var $cclass = null;
 
   function __construct($data, $table) {
     $this->data = $data;
     $this->table = $table;
+    $this->cclass = new Monster($this->data);
   }
 
   function get($key, $default = FALSE){
@@ -138,8 +141,10 @@ class Fight_model extends BASE_Model{
   //L - your number of items + luck (max 7 i think)
   //S - speed
   function damage($c1, $c2){
-    $damage = mt_rand($c1->get('damage_min'), $c1->get('damage_max'));
-    if ($damage == $this->char->get('damage_max')){
+    $dmin = $c1->cclass->damage_min();
+    $dmax = $c1->cclass->damage_max();
+    $damage = mt_rand($dmin, $dmax);
+    if ($damage == $dmax){
       $damage *= 2;
       $this->log[] = sprintf('Character strikes excelent hit');
     }
@@ -152,7 +157,8 @@ class Fight_model extends BASE_Model{
     $this->regenerateParty($this->players);
     $this->log[] = 'Regenerate monsters';
     $this->regenerateParty($this->monsters);
-
+    //Load abstraction
+    $this->char->createPoints();
     if (!$post){
       //Do nothing?
       return;
