@@ -54,7 +54,8 @@ class Fight extends IN_Controller{
     }
     $this->data['fight'] = $this->fight_model->getData();
     $this->data['monsters'] = $this->fight_model->monsters;
-    $this->data['exp'] = $this->fight_model->victory();
+    $this->fight_model->victory();
+    $this->data['log'] = $this->fight_model->log;
     $this->render();
   }
 }

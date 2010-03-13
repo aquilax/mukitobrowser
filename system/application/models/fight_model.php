@@ -229,13 +229,24 @@ class Fight_model extends BASE_Model{
 
   function victory(){
     $exp = 0;
+    $money = 0;
     foreach ($this->monsters->list as $monster){
       $exp += $monster->get('hp_max');
+      $money += $monster->get('money_rate');
     }
+    $this->log[] = sprintf(lang('Got %d experience'), $exp);
+    if ($money){
+      $this->log[] = sprintf(lang('Got %d zen'), $money);
+    }
+    $ol = $this->char->get('level');
     $this->char->set('experience', $this->char->get('experience') + $exp);
+    $this->char->set('money', $this->char->get('money') + $money);
     $this->char->set('state', 1);
     $this->char->update('characters');
-    return $exp;
+    $nl = $this->char->get('level');
+    if ($ol < $nl){
+      $this->log[] = sprintf(lang('Level up to level %d'), $nl);
+    }
   }
 
 
