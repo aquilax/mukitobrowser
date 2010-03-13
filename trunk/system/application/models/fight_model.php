@@ -227,6 +227,18 @@ class Fight_model extends BASE_Model{
     redirect('fight/victory');
   }
 
+  function getDrops($monster, $n){
+    $this->db->where('min_level' >= $monster->get('level'));
+    $this->db->where('max_level' <= $monster->get('level'));
+    $this->db->where_in('map_id', array(-1, $this->char-get('map_id')));
+    $this->db->join('item i', 'item_id = i.id');
+    $r = mt_rand(1, 10000);
+    $this->db->order_by(('rate-'.$r), 'ASC', FALSE);
+    $query = $this->db->get('drop_rate', $n);
+    return $query->result_array();
+  }
+
+
   function victory(){
     $exp = 0;
     $money = 0;
@@ -248,7 +260,5 @@ class Fight_model extends BASE_Model{
       $this->log[] = sprintf(lang('Level up to level %d'), $nl);
     }
   }
-
-
 }
 ?>
