@@ -4,7 +4,7 @@
  *
  * @author aquilax
  */
-class fe extends Char{
+class fe extends Player{
 
   function damage_max(){
     //Maximum Damage:
