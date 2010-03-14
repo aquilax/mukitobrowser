@@ -33,5 +33,17 @@ class Monster extends Player{
   function skill_damage(){
     return 0;
   }
+
+  function max_hp(){
+    return 0;
+  }
+
+  function max_mp(){
+    return 0;
+  }
+
+  function sp_on_level(){
+    return 0;
+  }
 }
 ?>
