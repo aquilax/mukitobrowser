@@ -54,9 +54,10 @@ class Map_model extends Model{
     //Choose enemies
     $mid = 1;
     //ugly but should work
-    $this->db->where('id', $mid);
-    $query = $this->db->get('monster', 1);
-    $monster = $query->row_array();
+    $mob = rand(1,3);
+    $this->db->order_by('RAND()', null, FALSE);
+    $query = $this->db->get('monster', $mob);
+    $monsters = $query->result_array();
     
     $data = array(
       'character_id' => $this->char->get('id'),
@@ -69,16 +70,15 @@ class Map_model extends Model{
     $this->db->insert('fight', $data);
     $fid = $this->db->insert_id();
     //insertEnemies
-    $data = array(
-      'fight_id' => $fid,
-      'monster_id' => $monster['id'],
-      'hp' => $monster['hp_max'],
-      'hp_next_regen' => time()+$monster['hp_regen_time'],
-      'mp' => $monster['mp_max'],
-      'state' => 1,
-    );
-    $mob = rand(1,3);
-    for($i = 0; $i < $mob; $i++){
+    foreach($monsters as $monster){
+      $data = array(
+        'fight_id' => $fid,
+        'monster_id' => $monster['id'],
+        'hp' => $monster['hp_max'],
+        'hp_next_regen' => time()+$monster['hp_regen_time'],
+        'mp' => $monster['mp_max'],
+        'state' => 1,
+      );
       $this->db->insert('enemy', $data);
     }
     return $fid;
