@@ -30,6 +30,7 @@ class Fight_model extends BASE_Model{
   var $log = array();
   var $run = FALSE;
   var $dead_state = 255;
+  var $PK_LEVEL_DEFAULT = 3;
 
   function load($fid){
     $this->db->where('id', $fid);
@@ -215,12 +216,69 @@ class Fight_model extends BASE_Model{
     return $query->result_array();
   }
 
+  function _getExpOnPlayerDie($mlevel){
+    $minexp = $this->calcExp($mlevel-1);
+    $maxexp = $this->calcExp($mlevel);
+    $subexp = 0;
+    $clevel = $this->char->get('level');
+    $cexp = $this->char->get('experience');
+
+    if( $clevel == $this->PK_LEVEL_DEFAULT-1 ) {
+      $subexp = $cexp-((($maxexp-$minexp)*2)/100);
+    } else if( $clevel == $this->PK_LEVEL_DEFAULT ){
+      $subexp = $cexp-((($maxexp-$minexp)*4)/100);
+    } else if( $clevel == $this->PK_LEVEL_DEFAULT+1){
+      $subexp = $cexp-((($maxexp-$minexp)*6)/100);
+    } else if( $clevel == $this->PK_LEVEL_DEFAULT+2 ){
+      $subexp = $cexp - ((($maxexp-$minexp)*8)/100);
+    } else if( $clevel >= $this->PK_LEVEL_DEFAULT+3 ){
+      $subexp = $cexp-((($maxexp-$minexp)*10)/100);
+    } else {
+      $subexp = $cexp-((($maxexp-$minexp)*2)/100);
+    }
+    if( $subexp < $minexp ) {
+      $subexp = $minexp;
+    }
+  }
+
+  function _getExp($char, $monster){
+    $exp = 0;
+    $maxexp = 0;
+    $level = (($monster->get('level')+10) * $monster->get('level'))/4;
+
+    if (($monster->get('level')+10) < $char->get('level')){
+      $level = $level * ($monster->get('level')+10) / $char->get('level');
+    }
+    if ($level > 0){
+      $maxexp = ceil($level/2);
+    } else {
+      $level = 0;
+    }
+    if ($maxexp < 1){
+      $exp = $level;
+    } else {
+      $exp = $level+(mt_rand(0, $maxexp));
+    }
+    return ceil(($monster->get('damage_max')*$exp)/$monster->get('hp_max'));
+  }
+
+  function _getMoney($exp, $monster){
+    $rate = $monster->get('money_rate');
+    if ($rate == 0) $rate = 1;
+    if (mt_rand(1, $rate) < 10){
+      return $exp;
+    } else {
+      return 0;
+    }
+  }
+
   function victory(){
     $exp = 0;
     $money = 0;
     foreach ($this->monsters->list as $monster){
-      $exp += $monster->get('hp_max');
-      $money += $monster->get('money_rate');
+      $gexp = $this->_getExp($this->char, $monster);
+      $exp += $gexp;
+      $money += $this->_getMoney($gexp, $monster);
     }
     $this->log[] = sprintf(lang('Got %d experience'), $exp);
     if ($money){
