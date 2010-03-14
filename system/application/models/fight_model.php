@@ -6,52 +6,53 @@
  */
 
 require_once 'BASE_Model.php';
-require_once('chars/char.php');
-require_once('chars/monster.php');
+require_once 'chars/player.php';
 
-//Light player
-class Player{
-  var $data = array();
-  var $update = array();
-  var $table = '';
-  var $cclass = null;
-
-  function __construct($data, $table) {
-    $this->data = $data;
-    $this->table = $table;
-    $this->cclass = new Monster($this->data);
-  }
-
-  function get($key, $default = FALSE){
-    if (isset($this->data[$key])){
-      return $this->data[$key];
-    } else {
-      return FALSE;
-    }
-  }
-
-  function set($key, $val){
-    $ov = $this->get($key);
-    if ($ov != $val){
-      $this->data[$key] = $val;
-      $this->update[$key] = $val;
-    }
-  }
-
-  function update($key = 'id'){
-    if ($this->update){
-      $this->db->where($key, $this->get($key));
-      $this->db->update($this->table, $this->update);
-    }
-  }
-}
 
 //Light Party
 class Party{
   var $list = array();
 
+  //Player factory
+  function _createPlayer($data, $table){
+    switch($data['class_id']){
+      case 1:{
+        require_once('chars/dk.php');
+        return new dk($data, $table);
+        break;
+      }
+      case 2:{
+        require_once('chars/dw.php');
+        return new dw($data, $table);
+        break;
+      }
+      case 3:{
+        require_once('chars/fe.php');
+        return new fe($data, $table);
+        break;
+      }
+      case 4:{
+        require_once('chars/mg.php');
+        return new mg($data, $table);
+        break;
+      }
+      case 5:{
+        //Failsafe to dk
+        require_once('chars/dk.php');
+        return new dk($data, $table);
+        break;
+        break;
+      }
+      case 255:{
+        require_once('chars/monster.php');
+        return new Monster($data, $table);
+        break;
+      }
+    }
+  }
+
   function add($data, $table){
-    $this->list[$data['id']] = new Player($data, $table);
+    $this->list[$data['id']] = $this->_createPlayer($data, $table);
   }
 
   function getId($id){
@@ -83,6 +84,7 @@ class Fight_model extends BASE_Model{
       $this->monsters = new Party();
       $monsters = $this->getMonstersForFight($fid);
       foreach($monsters as $monster){
+        $monster['class_id'] = 255;
         $this->monsters->add($monster, 'enemy');
       }
       //To be fair set the time at the beginning
@@ -141,8 +143,8 @@ class Fight_model extends BASE_Model{
   //L - your number of items + luck (max 7 i think)
   //S - speed
   function damage($c1, $c2){
-    $dmin = $c1->cclass->damage_min();
-    $dmax = $c1->cclass->damage_max();
+    $dmin = $c1->damage_min();
+    $dmax = $c1->damage_max();
     $damage = mt_rand($dmin, $dmax);
     if ($damage == $dmax){
       $damage *= 2;
@@ -157,8 +159,6 @@ class Fight_model extends BASE_Model{
     $this->regenerateParty($this->players);
     $this->log[] = 'Regenerate monsters';
     $this->regenerateParty($this->monsters);
-    //Load abstraction
-    $this->char->createPoints();
     if (!$post){
       //Do nothing?
       return;
@@ -169,8 +169,9 @@ class Fight_model extends BASE_Model{
       $this->log[] = 'Player\'s turn';
       foreach($post['mid'] as $cid => $mid){
         if ($post['aid'][$cid] == 1){
+          $character = $this->players->getId($cid);
           $monster = $this->monsters->getId($mid);
-          $damage = $this->damage($this->char, $monster);
+          $damage = $this->damage($character, $monster);
           
           $take =  $damage - $monster->get('defense');
           if ($take >= 1){

@@ -4,7 +4,7 @@
  *
  * @author aquilax
  */
-class Monster extends Char{
+class Monster extends Player{
 
   function damage_max(){
     return $this->get('damage_max');

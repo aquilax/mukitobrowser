@@ -4,7 +4,7 @@
  *
  * @author aquilax
  */
-class mg extends Char{
+class mg extends Player{
 
   function damage_max(){
     //Maximum Damage: S/4+E/8+WeaponMaxDamage

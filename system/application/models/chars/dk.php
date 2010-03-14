@@ -4,7 +4,7 @@
  *
  * @author aquilax
  */
-class dk extends Char{
+class dk extends Player{
 
   function damage_max(){
     //Maximum Damage: S/4 + WeaponMaxDamage
