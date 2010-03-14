@@ -89,6 +89,7 @@ class Map_model extends Model{
   function move($post){
     $ret = array();
     $ret['c'] = 'game/explore';
+    $move = TRUE;
 
     $x = $this->char->get('xpos');
     $y = $this->char->get('ypos');
@@ -109,6 +110,7 @@ class Map_model extends Model{
     $res = $this->checkTile($x, $y, $this->char->get('map_id'));
 
     if (!$res || $res['move'] == 0){
+      $move = FALSE;
       $x = $this->char->get('xpos');
       $y = $this->char->get('ypos');
     }
@@ -127,7 +129,7 @@ class Map_model extends Model{
         }
         $ret['c'] = $place['controller'];
       }
-    } else {
+    } elseif ($move) {
       $max = 2+(10-$res['chancetofight']);
       $chancetofight = mt_rand(1,$max);
       //$chancetofight = 0;
