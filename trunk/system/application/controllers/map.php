@@ -23,6 +23,8 @@ class Map extends IN_Controller{
     $this->data['title'] = lang('Exploring');
     $x = $this->char->get('xpos');
     $y = $this->char->get('ypos');
+    $this->data['x'] = $x;
+    $this->data['y'] = $y;
     $mid = $this->char->get('map_id');
     $this->data['map'] = $this->map_model->getMap($x, $y, $mid);
     $this->render();

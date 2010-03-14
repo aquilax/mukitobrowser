@@ -26,5 +26,5 @@
     echo '<tr>';
   }
   echo '</table>';
-  echo '<span id="loading" style="display:none">...</span>';
+  echo 'Coord: <span id="xc">'.$x.'.</span>x<span id="yc">'.$y.'</span><span id="loading" style="display:none">...</span>';
 ?>
