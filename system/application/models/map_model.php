@@ -55,6 +55,7 @@ class Map_model extends Model{
     $mid = 1;
     //ugly but should work
     $mob = rand(1,3);
+    $this->db->where('level <=',  $this->char->get('level')+2);
     $this->db->order_by('RAND()', null, FALSE);
     $query = $this->db->get('monster', $mob);
     $monsters = $query->result_array();
