@@ -15,6 +15,6 @@
     }
     echo '</table>';
   } else {
-    echo sprintf(lang('You don\'t have any characters. Go and % one'), anchor('user/create_character', 'create'));
+    echo sprintf(lang('You don\'t have any characters. Go and %s one'), anchor('user/create_character', 'create'));
   }
 ?>

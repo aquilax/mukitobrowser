@@ -24,43 +24,19 @@ class Character_model extends BASE_Model{
     }
   }
 
-  function createPoints(){
-    require_once('chars/char.php');
-    switch($this->get('class_id')){
-      case 1: {
-        require_once('chars/dk.php');
-        $this->cclass = new dk($this->getData());
-        break;
-      }
-      case 2: {
-        require_once('chars/dw.php');
-        $this->cclass = new dw($this->getData());
-        break;
-      }
-      case 3: {
-        require_once('chars/fe.php');
-        $this->cclass = new fe($this->getData());
-        break;
-      }
-      case 4: {
-        require_once('chars/mg.php');
-        $this->cclass = new mg($this->getData());
-        break;
-      }
-      default:{
-        require_once('chars/dk.php');
-        $this->cclass = new dk($this->getData());
-        break;
-      }
-    }
-  }
-
   function levelUp(){
-    $this->set('max_experience', $this->get('max_experience')*2);
+    require_once 'chars/player.php';
+    $pf = new PlayerFactory();
+    $pl = $pf->createPlayer($this->data);
     $this->set('level', $this->get('level')+1);
+    $this->set('max_experience', $pl->experience($this->get('level')));
+    $this->set('hp_max', $pl->max_hp());
+    $this->set('mp_max', $pl->max_mp());
+    $this->set('sp_max', $pl->max_sp());
     $this->set('points', $this->get('points')+$this->levelUpPoints);
     $this->set('hp', $this->get('hp_max'));
     $this->set('mp', $this->get('mp_max'));
+    $this->set('sp', $this->get('sp_max'));
   }
 
   function update($table, $key = 'id'){

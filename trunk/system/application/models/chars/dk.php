@@ -40,5 +40,17 @@ class dk extends Player{
     //Basic Skill Damage: 200%+(E/10)%
     return ceil(200+($this->get('energy') / 10));
   }
+
+  function max_hp(){
+    return 110 + $this->get('level') * 2 + $this->get('vitality') * 3;
+  }
+
+  function max_mp(){
+    return ceil(20 + $this->get('level') / 2 + $this->get('energy'));
+  }
+
+  function sp_on_level(){
+    return 5;
+  }
 }
 ?>

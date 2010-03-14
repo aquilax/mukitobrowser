@@ -46,5 +46,17 @@ class fe extends Player{
     //Basic Skill Damage: 200%+(E/10)%
     return ceil(200+($this->get('energy') / 10));
   }
+
+  function max_hp(){
+    return 80 + $this->get('level') + $this->get('vitality');
+  }
+
+  function max_mp(){
+    return ceil(30 + $this->get('level') / 2 + $this->get('energy') /2);
+  }
+
+  function sp_on_level(){
+    return 5;
+  }
 }
 ?>

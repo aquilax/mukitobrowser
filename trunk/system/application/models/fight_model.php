@@ -10,49 +10,11 @@ require_once 'chars/player.php';
 
 
 //Light Party
-class Party{
+class Party extends PlayerFactory{
   var $list = array();
 
-  //Player factory
-  function _createPlayer($data, $table){
-    switch($data['class_id']){
-      case 1:{
-        require_once('chars/dk.php');
-        return new dk($data, $table);
-        break;
-      }
-      case 2:{
-        require_once('chars/dw.php');
-        return new dw($data, $table);
-        break;
-      }
-      case 3:{
-        require_once('chars/fe.php');
-        return new fe($data, $table);
-        break;
-      }
-      case 4:{
-        require_once('chars/mg.php');
-        return new mg($data, $table);
-        break;
-      }
-      case 5:{
-        //Failsafe to dk
-        require_once('chars/dk.php');
-        return new dk($data, $table);
-        break;
-        break;
-      }
-      case 255:{
-        require_once('chars/monster.php');
-        return new Monster($data, $table);
-        break;
-      }
-    }
-  }
-
-  function add($data, $table){
-    $this->list[$data['id']] = $this->_createPlayer($data, $table);
+  function add($data){
+    $this->list[$data['id']] = $this->createPlayer($data);
   }
 
   function getId($id){
@@ -78,14 +40,14 @@ class Fight_model extends BASE_Model{
 
       //Load Player's party
       $this->players = new Party();
-      $this->players->add($this->char->getData(), 'character');
+      $this->players->add($this->char->getData());
 
       //Load Monster's party
       $this->monsters = new Party();
       $monsters = $this->getMonstersForFight($fid);
       foreach($monsters as $monster){
         $monster['class_id'] = 255;
-        $this->monsters->add($monster, 'enemy');
+        $this->monsters->add($monster);
       }
       //To be fair set the time at the beginning
       $this->time = time();
@@ -148,7 +110,7 @@ class Fight_model extends BASE_Model{
     $damage = mt_rand($dmin, $dmax);
     if ($damage == $dmax){
       $damage *= 2;
-      $this->log[] = sprintf('Character strikes excelent hit');
+      $this->log[] = sprintf('%s strikes excelent hit', $c1->get('name'));
     }
     return $damage;
   }
@@ -169,17 +131,17 @@ class Fight_model extends BASE_Model{
       $this->log[] = 'Player\'s turn';
       foreach($post['mid'] as $cid => $mid){
         if ($post['aid'][$cid] == 1){
-          $character = $this->players->getId($cid);
+          $char = $this->players->getId($cid);
           $monster = $this->monsters->getId($mid);
-          $damage = $this->damage($character, $monster);
+          $damage = $this->damage($char, $monster);
           
           $take =  $damage - $monster->get('defense');
           if ($take >= 1){
             $hp = $monster->get('hp') - $take;
-            $this->log[] = sprintf('Character attacks and takes %d HP', $take);
+            $this->log[] = sprintf('%s attacks and takes %d HP', $char->get('name'), $take);
           } else {
             $hp = $monster->get('hp');
-            $this->log[] = sprintf('Character attacks but takes no HP');
+            $this->log[] = sprintf('%s attacks but takes no HP', $char->get('name'));
           }
           if ($hp < 0){
             $hp = 0;
@@ -194,25 +156,33 @@ class Fight_model extends BASE_Model{
       }
       //monster's turn
       $this->log[] = 'Monster\'s turn';
+
+      $char = $this->players->getId($cid);
       foreach ($this->monsters->list as $monster){
-        $char = $this->players->getId($cid);
-        $damage = $this->damage($monster, $this->char);
+        if ($monster->get('state') == $this->dead_state){
+          //Death monsters don't bite;
+          continue;
+        }
+        //FIXME: Wrong there may be be more than one players in the party
+        $damage = $this->damage($monster, $char);
         $take =  $damage - $char->get('defense');
         if ($take >= 1){
           $hp = $char->get('hp') - $take;
-          $this->log[] = sprintf('Monster attacks and takes %d HP', $take);
+          $this->log[] = sprintf('%s attacks and takes %d HP',$monster->get('name'), $take);
         } else {
           $hp = $char->get('hp');
-          $this->log[] = sprintf('Monster attacks but takes no HP');
+          $this->log[] = sprintf('%s attacks but takes no HP', $monster->get('name'));
         }
         if ($hp < 0){
           $hp = 0;
           $char->set('state', $this->dead_state);
-          $this->log[] = sprintf('Player is dead!');
+          $this->log[] = sprintf('%s is dead!', $char->get('name'));
+          break;
         }
         $char->set('hp', $hp);
-        $this->doUpdate($char, 'characters');
       }
+      //Update character(s)
+      $this->doUpdate($char, 'characters');
       $this->set('fight_round', $this->get('fight_round')+1);
       $this->update('fight');
     } elseif(isset($post['run'])){
@@ -244,7 +214,6 @@ class Fight_model extends BASE_Model{
     $query = $this->db->get('drop_rate', $n);
     return $query->result_array();
   }
-
 
   function victory(){
     $exp = 0;

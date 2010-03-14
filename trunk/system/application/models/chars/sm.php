@@ -1,10 +1,12 @@
 <?php
 /**
- * Description of dk
+ * Description of sm
  *
  * @author aquilax
  */
-class dw extends Player{
+
+//TODO fund Summoner's formulas. These are gor DK
+class sm extends Player{
 
   function damage_max(){
     //Maximum Damage: S/4 + WeaponMaxDamage
@@ -22,8 +24,8 @@ class dw extends Player{
   }
 
   function defense_power(){
-    //Base Defensive Power: A/5
-    return ceil($this->get('agility')/5);
+    //Base Defensive Power: A/3
+    return ceil($this->get('agility')/3);
   }
 
   function defense_success_rate(){
@@ -32,8 +34,8 @@ class dw extends Player{
   }
 
   function attack_speed(){
-    //Base Attack Speed: A/10
-    return ceil($this->get('agility') / 10);
+    //Base Attack Speed: A/15
+    return ceil($this->get('agility') / 15);
   }
 
   function skill_damage(){
@@ -43,14 +45,6 @@ class dw extends Player{
 
   function max_hp(){
     return 60 + $this->get('level') + $this->get('vitality');
-  }
-  
-  function max_mp(){
-    return 60 + $this->get('level') * 2 + $this->get('energy') * 2;
-  }
-
-  function sp_on_level(){
-    return 5;
   }
 }
 ?>
