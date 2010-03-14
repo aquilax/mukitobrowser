@@ -19,8 +19,6 @@ echo '<tr>';
   echo '</td>';
   echo '<td>';
   echo form_input(array('name' => 'name','value' => set_value('name'), 'id' => 'name', 'class' => 'text' ));
-  echo '<br />';
-  echo lang('Usernames must be 30 alphanumeric characters or less.');
   echo '</td>';
   echo '</tr>';
 

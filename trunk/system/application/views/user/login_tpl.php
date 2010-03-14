@@ -12,7 +12,7 @@
         <td><?php echo form_password('password', '', 'id="passf"')?></td>
       </tr>
       <tr>
-        <td colspan="2"><?php echo form_submit('login', lang('Login'), 'id="lbtn"');?></td>
+        <td colspan="2"><?php echo form_submit('login', lang('Login'), 'id="lbtn"').' '.anchor('user/register', lang('Register here...'));?></td>
       </tr>
     </table>
 <?php
